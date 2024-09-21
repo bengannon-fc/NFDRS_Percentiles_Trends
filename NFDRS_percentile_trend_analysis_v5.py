@@ -1,6 +1,6 @@
 # Created by: Matt Panunto (mpanunto@blm.gov) and Ben Gannon (benjamin.gannon@usda.gov)
 # Created on: XX/XX/2023
-# Last Updated: 07/23/2024
+# Last Updated: 09/21/2024
 
 '''
 Updates feature service with RAWS and PSA feature classes with observed and forecast fire weather/danger attributes from
@@ -61,9 +61,9 @@ RAWS_static_attrs = ['OBJECTID','StationName','NESSID','NWSID','Elevation','Lati
                      'Dispatch','PSA','FuelModelCode','GlobalID','CreationDate','Creator','EditDate','SHAPE']
 
 # Create url variables of basic NFDRS and Observation urls to RAWS xml data
-raws_nfdrs_url = 'https://famprod.nwcg.gov/wims/xsql/nfdrs.xsql?stn=&sig=&type=N&fmodel=&start=&end=&time=&sort=&ndays=&user='
-raws_nfdrs_fcast_url = 'https://famprod.nwcg.gov/wims/xsql/nfdrs.xsql?stn=&sig=&type=F&fmodel=&start=&end=&time=&sort=&ndays=&user='
-raws_obs_url = 'https://famprod.nwcg.gov/wims/xsql/obs.xsql?stn=&sig=&type=&fmodel=&start=&end=&time=&sort=&ndays=&user='
+raws_nfdrs_url = 'https://famprod.nwcg.gov/prod-wims/xsql/nfdrs.xsql?stn=&sig=&type=N&fmodel=&start=&end=&time=&sort=&ndays=&user='
+raws_nfdrs_fcast_url = 'https://famprod.nwcg.gov/prod-wims/xsql/nfdrs.xsql?stn=&sig=&type=F&fmodel=&start=&end=&time=&sort=&ndays=&user='
+raws_obs_url = 'https://famprod.nwcg.gov/prod-wims/xsql/obs.xsql?stn=&sig=&type=&fmodel=&start=&end=&time=&sort=&ndays=&user='
 
 # Create date variables to grab data for observation and forecast ranges
 datetime_obs_start = datetime_today - datetime.timedelta(days=2)
@@ -752,7 +752,13 @@ for i in range(0, raws_update_sdf.shape[0]):
                         curr_value = float(curr_value)
                         raws_update_sdf.loc[(raws_update_sdf['NWSID_Clean'] == curr_NWSID), curr_column] = curr_value
                         continue
-
+                    
+                    # If field is staffing level 'sl' only keep integer portion (first character)
+                    if(curr_column == 'sl'):
+                        curr_value = int(curr_value[0])
+                        raws_update_sdf.loc[(raws_update_sdf['NWSID_Clean'] == curr_NWSID), curr_column] = curr_value
+                        continue
+                        
                     # Otherwise, insert value as-is into 'raws_update_sdf'
                     raws_update_sdf.loc[(raws_update_sdf['NWSID_Clean'] == curr_NWSID), curr_column] = curr_value
 
