@@ -1,6 +1,6 @@
 # Created by: Matt Panunto (mpanunto@blm.gov) and Ben Gannon (benjamin.gannon@usda.gov)
 # Created on: XX/XX/2023
-# Last Updated: 09/21/2024
+# Last Updated: 10/21/2024
 
 '''
 Updates feature service with RAWS and PSA feature classes with observed and forecast fire weather/danger attributes from
@@ -211,7 +211,7 @@ for i in range(0, raws_update_sdf.shape[0]):
                     nfdrs_xml_try = nfdrs_xml_try + 1
                 else:
                     print_both('...NFDRS XML DOWNLOAD FAIL 5 TIMES, SKIPPING STATION\r')
-                    continue
+                    break
 
         # Now convert the NFDRS xml data to a pandas dataframe
         print_both('..DOWNLOADING NFDRS FORECAST DATA\r')
@@ -235,7 +235,7 @@ for i in range(0, raws_update_sdf.shape[0]):
                     nfdrs_xml_try = nfdrs_xml_try + 1
                 else:
                     print_both('...NFDRS FORECAST XML DOWNLOAD FAIL 5 TIMES, SKIPPING STATION\r')
-                    continue
+                    break
 
         # Now convert the Observation xml data to a pandas dataframe
         print_both('..DOWNLOADING OBS DATA\r')
@@ -259,7 +259,7 @@ for i in range(0, raws_update_sdf.shape[0]):
                     obs_xml_try = obs_xml_try + 1
                 else:
                     print_both('...OBS XML DOWNLOAD FAIL 5 TIMES, SKIPPING STATION\r')
-                    continue
+                    break
 
         # Sort NFDR Observation dataframe by 'nfdr_dt', then by 'mp'
         # Then create a 'nfdr_dt_tm' field
@@ -811,6 +811,7 @@ print_both('PSA NFDRS PERCENTILES AND 3-DAY TRENDS\r')
 
 # Get list of PSAs to update
 PSAs = sorted(list(set(allstations['PSA'].tolist())))
+PSAs = [PSA for PSA in PSAs if PSA != 'Non-PSA'] # Ignore non-PSA stations
 
 for i in range(0, len(PSAs)):
 
