@@ -1,5 +1,7 @@
 # NFDRS Percentiles and Trends
 
+This service and the associated code is deprecated following the transition from the Weather Information Management System (WIMS) to the Fire Environment Mapping System (FEMS) for Fire Danger. See the new NFDRS Percentiles and Trends FEMS repository for the latest service information and code.
+
 **Purpose**
 
 This code completes an automated pull of observed and forecasted fire danger data for Remote Automated Weather Stations (RAWS) from the Weather Information Management System (WIMS), and then translates Energy Release Component (ERC) and Burning Index (BI) raw values into percentiles, analyzes observed and forecasted trends for each index, and aggregates the same information up to the Predictive Service Area (PSA) level. The resulting spatial web service is intended to provide a high-level view of recently observed and forecasted fire danger for national and geographic area decision makers.
